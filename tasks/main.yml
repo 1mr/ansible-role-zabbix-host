@@ -1,0 +1,40 @@
+---
+- name: create a new host or update an existing host's info
+  local_action:
+    module: zabbix_host
+    server_url: "{{ zabbix_server }}"
+    login_user: "{{ zabbix_server_user }}"
+    login_password: "{{ zabbix_server_password }}"
+    host_name: "{{ zabbix.hostname|default(inventory_hostname) }}"
+    host_groups: "{{ zabbix.groups }}"
+    link_templates: "{{ zabbix.templates }}"
+    status: "{{ zabbix.status|default('enabled') }}"
+    state: "{{ zabbix.state|default('present') }}"
+    interfaces:
+      - type: 1
+        main: 1
+        useip: 1
+        ip: "{{ zabbix.ip|default(ansible_ssh_host) }}"
+        dns: "{{ zabbix.dns|default(inventory_hostname) }}"
+        port: "{{ zabbix.port|default(10050) }}"
+    proxy: "{{ zabbix.proxy|default(None) }}"
+    tls_accept: "{{ zabbix.tls.accept|default(1) }}"
+    tls_connect: "{{ zabbix.tls.connect|default(1) }}"
+    tls_psk: "{{ zabbix.tls.psk|default(None) }}"
+    tls_psk_identity: "{{ zabbix.tls.identity|default(None) }}"
+  when: zabbix is defined
+
+- name: create a new host macro or update an existing macro's value
+  local_action:
+    module: zabbix_hostmacro
+    server_url: "{{ zabbix_server }}"
+    login_user: "{{ zabbix_server_user }}"
+    login_password: "{{ zabbix_server_password }}"
+    host_name: "{{ zabbix.hostname|default(inventory_hostname) }}"
+    macro_name: "{{ item.0 }}"
+    macro_value: "{{ item.1 }}"
+    state: present
+  with_together:
+    - "{{ zabbix.macros.name }}"
+    - "{{ zabbix.macros.value }}"
+  when: zabbix.macros is defined
