@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/1mr/ansible-role-zabbix-host.svg?branch=master)](https://travis-ci.com/1mr/ansible-role-zabbix-host)
+
 Zabbix-host
 ===========
 
