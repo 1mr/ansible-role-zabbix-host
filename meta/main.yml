@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: zabbix-host
   author: Stas Stavnichuk
   description: configure host zabbix settings
   license: MIT
